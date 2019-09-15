@@ -1,22 +1,19 @@
 package ml.denis3d.tabs4survival;
 
 
-import com.google.common.reflect.TypeToken;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.AbstractButton;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.registries.*;
+import net.minecraftforge.registries.GameData;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.List;
 
 public class SurvivalTab extends AbstractButton implements IForgeRegistryEntry<SurvivalTab> {
 
@@ -26,6 +23,9 @@ public class SurvivalTab extends AbstractButton implements IForgeRegistryEntry<S
     private ResourceLocation registryName = null;
     ResourceLocation texture = new ResourceLocation("textures/gui/container/creative_inventory/tabs.png");
     protected ItemRenderer itemRenderer;
+
+    protected static ArrayList<SurvivalTab> TABS = new ArrayList<SurvivalTab>();
+
 
     public SurvivalTab(int guiXSize, int guiYSize) {
         super(0, 0, 28, 25, "");
@@ -58,12 +58,12 @@ public class SurvivalTab extends AbstractButton implements IForgeRegistryEntry<S
     @Override
     public void renderButton(int p_renderButton_1_, int p_renderButton_2_, float p_renderButton_3_)
     {
-        if (RegistryManager.ACTIVE.getRegistry(new ResourceLocation(Tabs4Survival.MOD_ID, "survival_tab")).getID(getRegistryName()) >= 6)
+        if (TABS.indexOf(this) >= 6)
         {
             return;
         }
         this.itemRenderer = Minecraft.getInstance().getItemRenderer();
-        this.x = (Minecraft.getInstance().currentScreen.width - guiXSize) / 2 + RegistryManager.ACTIVE.getRegistry(new ResourceLocation(Tabs4Survival.MOD_ID, "survival_tab")).getID(getRegistryName()) * 29;
+        this.x = (Minecraft.getInstance().currentScreen.width - guiXSize) / 2 + TABS.indexOf(this) * 29;
         this.y = (Minecraft.getInstance().currentScreen.height - guiYSize) / 2 - 25;
 
         if (this.visible)
@@ -74,7 +74,7 @@ public class SurvivalTab extends AbstractButton implements IForgeRegistryEntry<S
             Minecraft.getInstance().getTextureManager().bindTexture(this.texture);
             this.blit(this.x,
                     this.isFocused() ? this.y : this.y - 3,
-                    RegistryManager.ACTIVE.getRegistry(new ResourceLocation(Tabs4Survival.MOD_ID, "survival_tab")).getID(getRegistryName()) * 28,
+                    TABS.indexOf(this) * 28,
                     this.isFocused() ? 2 : 32,
                     28,
                     this.isFocused() ? 25 : 32);
@@ -93,7 +93,7 @@ public class SurvivalTab extends AbstractButton implements IForgeRegistryEntry<S
         }
     }
 
-    public Class<Screen> getGui()
+    public Class<? extends Screen> getGui()
     {
         return null;
     }

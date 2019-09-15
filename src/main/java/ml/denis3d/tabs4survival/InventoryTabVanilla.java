@@ -1,27 +1,18 @@
 package ml.denis3d.tabs4survival;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.WinGameScreen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.command.arguments.NBTCompoundTagArgument;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.util.text.TranslationTextComponentFormatException;
-import net.minecraftforge.common.util.Constants;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class InventoryTabVanilla extends SurvivalTab
 {
 
     public InventoryTabVanilla() {
         super(176, 166);
-        setRegistryName(new ResourceLocation(Tabs4Survival.MOD_ID, "test"));
+        setRegistryName(new ResourceLocation(Tabs4Survival.MOD_ID, "inventory_tab_vanilla"));
 
         CompoundNBT nbt = new CompoundNBT();
         nbt.putString("SkullOwner", Minecraft.getInstance().getSession().getUsername());

@@ -1,6 +1,7 @@
 package ml.denis3d.tabs4survival;
 
 import net.minecraft.client.gui.widget.Widget;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.GuiScreenEvent;
@@ -9,9 +10,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.RegistryManager;
 import org.apache.logging.log4j.LogManager;
@@ -42,16 +40,19 @@ public class Tabs4Survival
     @SubscribeEvent
     public void guiPostInit (GuiScreenEvent.InitGuiEvent.Post event)
     {
-        for (SurvivalTab tab : RegistryManager.ACTIVE.getRegistry(SurvivalTab.class).getValues())
+        if (SurvivalTab.TABS.isEmpty())
         {
-            if (tab.getGui().isInstance(event.getGui()))
-            {
-                for(SurvivalTab t : RegistryManager.ACTIVE.getRegistry(SurvivalTab.class).getValues())
-                {
-                    ObfuscationReflectionHelper.setPrivateValue(Widget.class, t, !t.getGui().isInstance(event.getGui()), "focused");
+            SurvivalTab.TABS.add(RegistryManager.ACTIVE.getRegistry(SurvivalTab.class).getValue(new ResourceLocation(Tabs4Survival.MOD_ID, "inventory_tab_vanilla")));
+            RegistryManager.ACTIVE.getRegistry(SurvivalTab.class).getValues().stream().forEachOrdered(survivalTab -> {
+                if (!survivalTab.getRegistryName().equals(new ResourceLocation(Tabs4Survival.MOD_ID, "inventory_tab_vanilla")))
+                    SurvivalTab.TABS.add(survivalTab);
+            });
+        }
 
-                    event.addWidget(t);
-                }
+        if (RegistryManager.ACTIVE.getRegistry(SurvivalTab.class).getValues().stream().anyMatch(survivalTab -> survivalTab.getGui().isInstance(event.getGui()))) {
+            for (SurvivalTab t : RegistryManager.ACTIVE.getRegistry(SurvivalTab.class).getValues()) {
+                ObfuscationReflectionHelper.setPrivateValue(Widget.class, t, !t.getGui().isInstance(event.getGui()), "focused");
+                event.addWidget(t);
             }
         }
     }

@@ -8,10 +8,13 @@ buildscript {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
     }
 }
+
+
 apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
+
 
 version = '1.0.0'
 group = 'ml.denis3d' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -81,8 +84,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.4-28.0.100'
-
+    minecraft 'net.minecraftforge:forge:1.14.4-28.1.0'
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
@@ -112,8 +114,8 @@ def reobfArtifact = artifacts.add('default', reobfFile) {
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifactId = 'tabs4survival'
             artifact reobfArtifact
+            artifactId = 'tabs4survival'
         }
     }
     repositories {
